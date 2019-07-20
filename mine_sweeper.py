@@ -6,13 +6,13 @@ import pygame
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 
 WIDTH = 20
-HEIGHT = 15
+HEIGHT = 20
 SIZE = 50
-NUM_OF_BOMBS = 20
+NUM_OF_BOMBS = 25
 EMPTY = 0
 BOMB = 1
-WALL = 1
-NUM_OF_WALLS = 15
+WALL = 2
+NUM_OF_WALLS = 20
 OPENED = 2
 OPEN_COUNT = 0
 CHECKED = [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
@@ -107,24 +107,18 @@ def main():
             for xpos in range(WIDTH):
                 tile = field[ypos][xpos]
                 rect = (xpos*SIZE, ypos*SIZE, SIZE, SIZE)
-                
-                if tile == WALL:
-                    pygame.draw.rect(SURFACE,
-                                     (225,0,0),rect)
                     
-                if tile == EMPTY or tile == BOMB or tile == WALL:
-                    if tile == WALL:
-                        pygame.draw.rect(SURFACE,
-                                         (225,0,0),rect)
-                    
+                if tile == EMPTY or tile == BOMB:
+    
                     # 공개되지 않은 타일 (회색)
                     pygame.draw.rect(SURFACE,
                                      (192, 192, 192), rect)
-                    
+                        
                     # 지뢰 색 설정 (노란색)
                     if game_over and tile == BOMB:
                         pygame.draw.ellipse(SURFACE,
                                             (225, 255, 0), rect)
+                    
                 elif tile == OPENED:
                     count = num_of_bomb(field, xpos, ypos)
                     if count > 0:
@@ -146,6 +140,7 @@ def main():
             SURFACE.blit(message_clear, message_rect.topleft)
         elif game_over:
             SURFACE.blit(message_over, message_rect.topleft)
+            pygame.QUIT
 
         pygame.display.update()
         FPSCLOCK.tick(15)
